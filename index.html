@@ -1,55 +1,70 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-    <head>
-        <meta charset="UTF-8">
-        <title>排球失誤酒杯紀錄</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="簡單實用的排球失誤統計工具！使用 Tailwind 製作，可即時記錄每位球員的失誤次數，支援隊伍分類與 localStorage 保存。" />
-        <meta name="author" content="ttdragon" />
-        <meta property="og:title" content="排球失誤紀錄器 🏐📊" />
-        <meta property="og:description" content="簡單又實用的排球失誤記錄小工具，支援隊伍分類、即時加減、資料儲存！分享給你的隊友一起用起來。" />
-        <meta property="og:image" content="./haaha.jpg" />
-        <meta property="og:url" content="https://ttdragon0722.github.io/haha/" />
-        <meta property="og:type" content="website" />
-    </head>
-    <body class="bg-gray-100 p-4">
-        <div class="mb-6">
-            <h1 class="text-2xl font-bold mb-2">排球失誤酒杯紀錄器</h1>
-            <div class="flex gap-4 flex-col">
-                <div class="w-full p-2 bg-blue-100 rounded">
-                    <h2 class="font-semibold text-blue-600 mb-2">隊伍1</h2>
-                    <div id="team1" class="space-y-2"></div>
-                </div>
-                <div class="w-full p-2 bg-red-100 rounded">
-                    <h2 class="font-semibold text-red-600 mb-2">隊伍2</h2>
-                    <div id="team2" class="space-y-2"></div>
-                </div>
-            </div>
+  <head>
+    <meta charset="UTF-8">
+    <title>排球失誤酒杯紀錄</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+      content="簡單實用的排球失誤統計工具！使用 Tailwind 製作，可即時記錄每位球員的失誤次數，支援隊伍分類與 localStorage 保存。" />
+    <meta name="author" content="ttdragon" />
+    <meta property="og:title" content="排球失誤紀錄器 🏐📊" />
+    <meta property="og:description"
+      content="簡單又實用的排球失誤記錄小工具，支援隊伍分類、即時加減、資料儲存！分享給你的隊友一起用起來。" />
+    <meta property="og:image" content="./haaha.jpg" />
+    <meta property="og:url" content="https://ttdragon0722.github.io/haha/" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body class="bg-gray-100 p-4">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold mb-2">排球失誤酒杯紀錄器</h1>
+      <div class="flex gap-4 flex-col">
+        <div class="w-full p-2 bg-blue-100 rounded">
+          <h2 class="font-semibold text-blue-600 mb-2">隊伍1</h2>
+          <div id="team1" class="space-y-2"></div>
         </div>
-
-        <div class="mb-4 flex flex-col justify-center">
-            <div class="w-full flex justify-center items-center">
-                <input id="nameInput" class="border p-2 rounded w-32"
-                    placeholder="名字">
-                <button onclick="adjustCount(-1)"
-                    class="bg-gray-300 px-3 py-1 mx-1 rounded">-</button>
-                <span id="tempCount">0</span>
-                <button onclick="adjustCount(1)"
-                    class="bg-gray-300 px-3 py-1 mx-1 rounded">+</button>
-
-            </div>
-            <div class="flex justify-center">
-                <button onclick="addToTeam(1)"
-                    class="bg-blue-500 text-white px-3 py-1 rounded">隊伍1</button>
-                <button onclick="addToTeam(2)"
-                    class="bg-red-500 text-white px-3 py-1 ml-2 rounded">隊伍2</button>
-            </div>
+        <div class="w-full p-2 bg-red-100 rounded">
+          <h2 class="font-semibold text-red-600 mb-2">隊伍2</h2>
+          <div id="team2" class="space-y-2"></div>
         </div>
+      </div>
+    </div>
 
-        <script>
+    <div class="mb-4 flex flex-col justify-center">
+      <div class="w-full flex justify-center items-center mb-2">
+        <input id="nameInput" class="border p-2 rounded w-32" placeholder="名字">
+        <button onclick="adjustCount(-1)"
+          class="bg-gray-300 px-3 py-1 mx-1 rounded">-</button>
+        <span id="tempCount">0</span>
+        <button onclick="adjustCount(1)"
+          class="bg-gray-300 px-3 py-1 mx-1 rounded">+</button>
+        <select id="nameSelect" onchange="onSelectName(this.value)"
+          class="ml-2 p-2 border rounded">
+          <option value>從記錄選擇名字</option>
+        </select>
+      </div>
+      <div class="flex justify-center">
+        <button onclick="addToTeam(1)"
+          class="bg-blue-500 text-white px-3 py-1 rounded">隊伍1</button>
+        <button onclick="addToTeam(2)"
+          class="bg-red-500 text-white px-3 py-1 ml-2 rounded">隊伍2</button>
+      </div>
+    </div>
+
+    <div class="mb-6 p-4 bg-white rounded shadow">
+      <h2 class="text-lg font-semibold mb-2">名字資料庫管理</h2>
+      <div class="flex gap-2 mb-2">
+        <input id="newName" class="border p-2 rounded w-40" placeholder="新增名字">
+        <button onclick="addToNameSource()"
+          class="bg-green-500 text-white px-3 py-1 rounded">新增</button>
+      </div>
+      <ul id="nameSourceList" class="pl-5 space-y-2"></ul>
+    </div>
+
+    <script>
     let players = JSON.parse(localStorage.getItem('players')) || [];
+    let nameSource = JSON.parse(localStorage.getItem('nameSource')) || []; // [{name, count}]
     let tempCount = 0;
 
     function adjustCount(val) {
@@ -82,6 +97,7 @@
         minus.className = 'bg-gray-200 px-2 rounded';
         minus.onclick = () => {
           if (player.count > 0) player.count--;
+          updateNameSourceCount(player.name, player.count);
           localStorage.setItem('players', JSON.stringify(players));
           renderTeams();
         };
@@ -94,6 +110,7 @@
         plus.className = 'bg-gray-200 px-2 rounded';
         plus.onclick = () => {
           player.count++;
+          updateNameSourceCount(player.name, player.count);
           localStorage.setItem('players', JSON.stringify(players));
           renderTeams();
         };
@@ -109,6 +126,90 @@
       });
     }
 
+    function updateNameSourceCount(name, count) {
+      const obj = nameSource.find(n => n.name === name);
+      if (obj) {
+        obj.count = count;
+        saveNameSource();
+        updateNameSourceList();
+      }
+    }
+
+    function updateNameSelect() {
+      const select = document.getElementById('nameSelect');
+      select.innerHTML = '<option value="">從記錄選擇名字</option>';
+      nameSource.forEach(obj => {
+        const option = document.createElement('option');
+        option.value = obj.name;
+        option.innerText = obj.name;
+        select.appendChild(option);
+      });
+    }
+
+    function updateNameSourceList() {
+      const list = document.getElementById('nameSourceList');
+      list.innerHTML = '';
+      nameSource.forEach((obj, idx) => {
+        const li = document.createElement('li');
+        li.className = 'flex justify-between items-center';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.innerText = obj.name;
+
+        const controls = document.createElement('div');
+        controls.className = 'flex items-center gap-1';
+
+        const minus = document.createElement('button');
+        minus.innerText = '-';
+        minus.className = 'bg-gray-200 px-2 rounded';
+        minus.onclick = () => {
+          if (obj.count > 0) obj.count--;
+          saveNameSource();
+          updateNameSourceList();
+        };
+
+        const count = document.createElement('span');
+        count.innerText = obj.count || 0;
+
+        const plus = document.createElement('button');
+        plus.innerText = '+';
+        plus.className = 'bg-gray-200 px-2 rounded';
+        plus.onclick = () => {
+          obj.count = (obj.count || 0) + 1;
+          saveNameSource();
+          updateNameSourceList();
+        };
+
+        const removeBtn = document.createElement('button');
+        removeBtn.innerText = '❌';
+        removeBtn.className = 'text-red-500';
+        removeBtn.onclick = () => {
+          nameSource.splice(idx, 1);
+          saveNameSource();
+          updateNameSelect();
+          updateNameSourceList();
+        };
+
+        controls.appendChild(minus);
+        controls.appendChild(count);
+        controls.appendChild(plus);
+        controls.appendChild(removeBtn);
+
+        li.appendChild(nameSpan);
+        li.appendChild(controls);
+        list.appendChild(li);
+      });
+    }
+
+    function onSelectName(value) {
+      document.getElementById('nameInput').value = value;
+      const obj = nameSource.find(n => n.name === value);
+      if (obj) {
+        tempCount = obj.count;
+        document.getElementById('tempCount').innerText = tempCount;
+      }
+    }
+
     function addToTeam(teamNum) {
       const name = document.getElementById('nameInput').value.trim();
       if (!name) return alert('請輸入名字');
@@ -120,13 +221,44 @@
       players.push({ name, count: tempCount, team: teamNum });
       localStorage.setItem('players', JSON.stringify(players));
 
+      const found = nameSource.find(obj => obj.name === name);
+      if (!found) {
+        nameSource.push({ name: name, count: tempCount });
+        saveNameSource();
+        updateNameSelect();
+        updateNameSourceList();
+      } else {
+        found.count = tempCount;
+        saveNameSource();
+        updateNameSourceList();
+      }
+
       document.getElementById('nameInput').value = '';
+      document.getElementById('nameSelect').value = '';
       tempCount = 0;
       document.getElementById('tempCount').innerText = '0';
       renderTeams();
     }
 
+    function addToNameSource() {
+      const newName = document.getElementById('newName').value.trim();
+      if (!newName) return;
+      if (!nameSource.find(obj => obj.name === newName)) {
+        nameSource.push({ name: newName, count: 0 });
+        saveNameSource();
+        updateNameSelect();
+        updateNameSourceList();
+        document.getElementById('newName').value = '';
+      }
+    }
+
+    function saveNameSource() {
+      localStorage.setItem('nameSource', JSON.stringify(nameSource));
+    }
+
+    updateNameSelect();
+    updateNameSourceList();
     renderTeams();
   </script>
-    </body>
+  </body>
 </html>

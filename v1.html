@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+    <head>
+        <meta charset="UTF-8">
+        <title>排球失誤酒杯紀錄</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="簡單實用的排球失誤統計工具！使用 Tailwind 製作，可即時記錄每位球員的失誤次數，支援隊伍分類與 localStorage 保存。" />
+        <meta name="author" content="ttdragon" />
+        <meta property="og:title" content="排球失誤紀錄器 🏐📊" />
+        <meta property="og:description" content="簡單又實用的排球失誤記錄小工具，支援隊伍分類、即時加減、資料儲存！分享給你的隊友一起用起來。" />
+        <meta property="og:image" content="./haaha.jpg" />
+        <meta property="og:url" content="https://ttdragon0722.github.io/haha/" />
+        <meta property="og:type" content="website" />
+    </head>
+    <body class="bg-gray-100 p-4">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold mb-2">排球失誤酒杯紀錄器</h1>
+            <div class="flex gap-4 flex-col">
+                <div class="w-full p-2 bg-blue-100 rounded">
+                    <h2 class="font-semibold text-blue-600 mb-2">隊伍1</h2>
+                    <div id="team1" class="space-y-2"></div>
+                </div>
+                <div class="w-full p-2 bg-red-100 rounded">
+                    <h2 class="font-semibold text-red-600 mb-2">隊伍2</h2>
+                    <div id="team2" class="space-y-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-4 flex flex-col justify-center">
+            <div class="w-full flex justify-center items-center">
+                <input id="nameInput" class="border p-2 rounded w-32"
+                    placeholder="名字">
+                <button onclick="adjustCount(-1)"
+                    class="bg-gray-300 px-3 py-1 mx-1 rounded">-</button>
+                <span id="tempCount">0</span>
+                <button onclick="adjustCount(1)"
+                    class="bg-gray-300 px-3 py-1 mx-1 rounded">+</button>
+
+            </div>
+            <div class="flex justify-center">
+                <button onclick="addToTeam(1)"
+                    class="bg-blue-500 text-white px-3 py-1 rounded">隊伍1</button>
+                <button onclick="addToTeam(2)"
+                    class="bg-red-500 text-white px-3 py-1 ml-2 rounded">隊伍2</button>
+            </div>
+        </div>
+
+        <script>
+    let players = JSON.parse(localStorage.getItem('players')) || [];
+    let tempCount = 0;
+
+    function adjustCount(val) {
+      tempCount += val;
+      if (tempCount < 0) tempCount = 0;
+      document.getElementById('tempCount').innerText = tempCount;
+    }
+
+    function renderTeams() {
+      document.getElementById('team1').innerHTML = '';
+      document.getElementById('team2').innerHTML = '';
+      players.forEach(player => {
+        const container = document.createElement('div');
+        container.className = 'flex items-center gap-2';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.innerText = '❌';
+        removeBtn.className = 'text-red-500';
+        removeBtn.onclick = () => {
+          players = players.filter(p => p.name !== player.name);
+          localStorage.setItem('players', JSON.stringify(players));
+          renderTeams();
+        };
+
+        const name = document.createElement('span');
+        name.innerText = player.name;
+
+        const minus = document.createElement('button');
+        minus.innerText = '-';
+        minus.className = 'bg-gray-200 px-2 rounded';
+        minus.onclick = () => {
+          if (player.count > 0) player.count--;
+          localStorage.setItem('players', JSON.stringify(players));
+          renderTeams();
+        };
+
+        const count = document.createElement('span');
+        count.innerText = player.count;
+
+        const plus = document.createElement('button');
+        plus.innerText = '+';
+        plus.className = 'bg-gray-200 px-2 rounded';
+        plus.onclick = () => {
+          player.count++;
+          localStorage.setItem('players', JSON.stringify(players));
+          renderTeams();
+        };
+
+        container.appendChild(removeBtn);
+        container.appendChild(name);
+        container.appendChild(minus);
+        container.appendChild(count);
+        container.appendChild(plus);
+
+        const teamDiv = player.team === 1 ? document.getElementById('team1') : document.getElementById('team2');
+        teamDiv.appendChild(container);
+      });
+    }
+
+    function addToTeam(teamNum) {
+      const name = document.getElementById('nameInput').value.trim();
+      if (!name) return alert('請輸入名字');
+      if (players.length >= 18) return alert('已達 18 人上限');
+
+      const exists = players.find(p => p.name === name);
+      if (exists) return alert('名字已存在');
+
+      players.push({ name, count: tempCount, team: teamNum });
+      localStorage.setItem('players', JSON.stringify(players));
+
+      document.getElementById('nameInput').value = '';
+      tempCount = 0;
+      document.getElementById('tempCount').innerText = '0';
+      renderTeams();
+    }
+
+    renderTeams();
+  </script>
+    </body>
+</html>
